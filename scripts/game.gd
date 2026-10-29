@@ -17,9 +17,11 @@ func _ready() -> void:
 	if GameManager.current_state == GameManager.GameState.CALIBRATION:
 		if calibration_menu:
 			calibration_menu.visible = true
+			calibration_menu.set_process(true)
 	else:
 		if calibration_menu:
 			calibration_menu.visible = false
+			calibration_menu.set_process(false)
 		GameManager.start_game_round(GameManager.round_duration)
 
 func _notification(what: int) -> void:

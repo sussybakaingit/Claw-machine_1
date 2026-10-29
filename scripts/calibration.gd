@@ -87,9 +87,15 @@ func update_step_ui() -> void:
 			instruction_label.text = "Your hand tracking is calibrated and ready. Starting game..."
 			progress_bar.value = 100.0
 
+var _is_finished: bool = false
+
 func _on_skip_pressed() -> void:
 	finish_calibration()
 
 func finish_calibration() -> void:
-	calibration_finished.emit()
+	if _is_finished:
+		return
+	_is_finished = true
+	set_process(false)
 	visible = false
+	calibration_finished.emit()

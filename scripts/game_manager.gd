@@ -55,7 +55,9 @@ func start_game_round(duration: float = 60.0) -> void:
 	prizes_won_count = 0
 	score_changed.emit(current_score)
 	time_updated.emit(time_left)
-	change_state(GameState.COUNTDOWN)
+	previous_state = current_state
+	current_state = GameState.COUNTDOWN
+	state_changed.emit(GameState.COUNTDOWN)
 
 func begin_playing() -> void:
 	change_state(GameState.PLAYING)

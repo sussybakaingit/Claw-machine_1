@@ -58,7 +58,7 @@ func _on_duration_60_pressed() -> void:
 
 func _on_play_pressed() -> void:
 	GameManager.round_duration = selected_duration
-	GameManager.current_state = GameManager.GameState.COUNTDOWN
+	GameManager.current_state = GameManager.GameState.MENU
 	get_tree().change_scene_to_file("res://scenes/game.tscn")
 
 func _on_calibrate_pressed() -> void:

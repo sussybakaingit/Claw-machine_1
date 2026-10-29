@@ -32,6 +32,8 @@ func _ready() -> void:
 	_update_tracking_ui()
 	_on_score_changed(GameManager.current_score)
 	_on_time_updated(GameManager.time_left)
+	if GameManager.current_state == GameManager.GameState.COUNTDOWN:
+		run_countdown()
 
 func _on_settings_changed() -> void:
 	if camera_preview_panel:

@@ -7,7 +7,7 @@ signal sidecar_error(message: String)
 
 const UDP_PORT: int = 4242
 const TIMEOUT_DURATION: float = 0.5
-const GESTURE_HOLD_TIME: float = 0.15
+const GESTURE_HOLD_TIME: float = 0.08
 const GESTURE_COOLDOWN: float = 0.4
 
 # Public state
@@ -153,11 +153,11 @@ func _process_udp_packets() -> void:
 
 func _process_gestures(delta: float) -> void:
 	var threshold: float = SettingsManager.gesture_threshold
-	# Hysteresis: press threshold is tighter, release threshold is looser
-	var pinch_press_thresh: float = threshold * 0.45
-	var pinch_release_thresh: float = threshold * 0.65
-	var fist_press_thresh: float = 0.5 + (1.0 - threshold) * 0.3
-	var fist_release_thresh: float = fist_press_thresh - 0.2
+	# Hysteresis: press threshold is responsive, release threshold is looser
+	var pinch_press_thresh: float = threshold * 0.85
+	var pinch_release_thresh: float = threshold * 1.15
+	var fist_press_thresh: float = 0.40 + (1.0 - threshold) * 0.25
+	var fist_release_thresh: float = fist_press_thresh - 0.15
 	
 	var is_pinch: bool = pinch_distance < pinch_press_thresh
 	var is_fist: bool = fist_amount > fist_press_thresh
