@@ -2,123 +2,195 @@
 
 [ext_resource type="Script" path="res://scripts/claw_controller.gd" id="1_claw"]
 
+; =================== MATERIALS ===================
+
+; --- Chrome Rail (polished silver) ---
 [sub_resource type="StandardMaterial3D" id="Mat_Chrome"]
 metallic = 0.95
-roughness = 0.15
-albedo_color = Color(0.85, 0.88, 0.92, 1)
+roughness = 0.1
+albedo_color = Color(0.88, 0.9, 0.94, 1)
+clearcoat_enabled = true
+clearcoat = 0.7
 
-[sub_resource type="BoxMesh" id="Mesh_RailX"]
-material = SubResource("Mat_Chrome")
-size = Vector3(1.7, 0.04, 0.04)
-
+; --- Motor Block (dark industrial metal) ---
 [sub_resource type="StandardMaterial3D" id="Mat_Motor"]
-metallic = 0.7
-roughness = 0.3
-albedo_color = Color(0.18, 0.2, 0.24, 1)
+metallic = 0.75
+roughness = 0.25
+albedo_color = Color(0.14, 0.16, 0.2, 1)
+clearcoat_enabled = true
+clearcoat = 0.3
 
-[sub_resource type="BoxMesh" id="Mesh_Carriage"]
-material = SubResource("Mat_Motor")
-size = Vector3(0.16, 0.08, 0.16)
-
+; --- Cable (dark steel wire) ---
 [sub_resource type="StandardMaterial3D" id="Mat_Cable"]
-metallic = 0.8
-roughness = 0.4
-albedo_color = Color(0.3, 0.32, 0.35, 1)
-
-[sub_resource type="CylinderMesh" id="Mesh_Cable"]
-material = SubResource("Mat_Cable")
-top_radius = 0.008
-bottom_radius = 0.008
-height = 0.5
-
-[sub_resource type="StandardMaterial3D" id="Mat_Hub"]
 metallic = 0.85
-roughness = 0.2
-albedo_color = Color(0.98, 0.75, 0.1, 1)
+roughness = 0.35
+albedo_color = Color(0.25, 0.27, 0.3, 1)
+
+; --- Hub (premium gold with clearcoat) ---
+[sub_resource type="StandardMaterial3D" id="Mat_Hub"]
+metallic = 0.9
+roughness = 0.12
+albedo_color = Color(1.0, 0.82, 0.15, 1)
 clearcoat_enabled = true
 clearcoat = 1.0
+emission_enabled = true
+emission = Color(1.0, 0.75, 0.1, 1)
+emission_energy_multiplier = 0.15
 
-[sub_resource type="CylinderMesh" id="Mesh_Hub"]
-material = SubResource("Mat_Hub")
-top_radius = 0.07
-bottom_radius = 0.09
-height = 0.08
-
+; --- Reticle (neon gold glow ring) ---
 [sub_resource type="StandardMaterial3D" id="Mat_NeonGold"]
 emission_enabled = true
-emission = Color(1, 0.8, 0.2, 1)
-emission_energy_multiplier = 3.0
+emission = Color(1, 0.85, 0.25, 1)
+emission_energy_multiplier = 4.0
+albedo_color = Color(1, 0.8, 0.2, 1)
 
-[sub_resource type="TorusMesh" id="Mesh_Reticle"]
-material = SubResource("Mat_NeonGold")
-inner_radius = 0.12
-outer_radius = 0.14
-
+; --- Prong (polished gold chrome) ---
 [sub_resource type="StandardMaterial3D" id="Mat_Prong"]
 metallic = 0.92
-roughness = 0.2
-albedo_color = Color(0.95, 0.85, 0.3, 1)
+roughness = 0.12
+albedo_color = Color(0.98, 0.88, 0.35, 1)
+clearcoat_enabled = true
+clearcoat = 0.8
 
+; --- Prong Tips (slightly darker gold for contrast) ---
+[sub_resource type="StandardMaterial3D" id="Mat_ProngTip"]
+metallic = 0.88
+roughness = 0.18
+albedo_color = Color(0.92, 0.78, 0.25, 1)
+clearcoat_enabled = true
+clearcoat = 0.6
+
+; =================== MESHES ===================
+
+; Rail X
+[sub_resource type="BoxMesh" id="Mesh_RailX"]
+material = SubResource("Mat_Chrome")
+size = Vector3(1.72, 0.045, 0.045)
+
+; Rail Z (perpendicular)
+[sub_resource type="BoxMesh" id="Mesh_RailZ"]
+material = SubResource("Mat_Chrome")
+size = Vector3(0.045, 0.045, 1.52)
+
+; Carriage block
+[sub_resource type="BoxMesh" id="Mesh_Carriage"]
+material = SubResource("Mat_Motor")
+size = Vector3(0.18, 0.09, 0.18)
+
+; Cable wire
+[sub_resource type="CylinderMesh" id="Mesh_Cable"]
+material = SubResource("Mat_Cable")
+top_radius = 0.01
+bottom_radius = 0.01
+height = 0.5
+
+; Hub cylinder
+[sub_resource type="CylinderMesh" id="Mesh_Hub"]
+material = SubResource("Mat_Hub")
+top_radius = 0.08
+bottom_radius = 0.1
+height = 0.09
+radial_segments = 24
+
+; Hub Ring (decorative ring around hub base)
+[sub_resource type="TorusMesh" id="Mesh_HubRing"]
+material = SubResource("Mat_NeonGold")
+inner_radius = 0.085
+outer_radius = 0.11
+ring_segments = 24
+
+; Reticle (ground marker)
+[sub_resource type="TorusMesh" id="Mesh_Reticle"]
+material = SubResource("Mat_NeonGold")
+inner_radius = 0.13
+outer_radius = 0.15
+ring_segments = 24
+
+; Prong upper segment
 [sub_resource type="CapsuleMesh" id="Mesh_ProngUpper"]
 material = SubResource("Mat_Prong")
-radius = 0.015
-height = 0.22
+radius = 0.018
+height = 0.24
+
+; Prong tip segment
+[sub_resource type="CapsuleMesh" id="Mesh_ProngTip"]
+material = SubResource("Mat_ProngTip")
+radius = 0.016
+height = 0.18
+
+; =================== COLLISION SHAPES ===================
 
 [sub_resource type="CapsuleShape3D" id="Shape_ProngUpper"]
-radius = 0.022
-height = 0.22
-
-[sub_resource type="CapsuleMesh" id="Mesh_ProngTip"]
-material = SubResource("Mat_Prong")
-radius = 0.014
-height = 0.16
+radius = 0.025
+height = 0.24
 
 [sub_resource type="CapsuleShape3D" id="Shape_ProngTip"]
-radius = 0.02
-height = 0.16
+radius = 0.022
+height = 0.18
 
 [sub_resource type="SphereShape3D" id="Shape_GripArea"]
 radius = 0.32
 
+; =================== SCENE TREE ===================
+
 [node name="Claw" type="Node3D"]
 script = ExtResource("1_claw")
 
+; --- Gantry (X-axis rail) ---
 [node name="GantryX" type="Node3D" parent="."]
 
 [node name="RailMeshX" type="MeshInstance3D" parent="GantryX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
 mesh = SubResource("Mesh_RailX")
 
+; --- Carriage (moves along Z) ---
 [node name="CarriageZ" type="Node3D" parent="GantryX"]
 
+; Z-axis rail visual
+[node name="RailMeshZ" type="MeshInstance3D" parent="GantryX/CarriageZ"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+mesh = SubResource("Mesh_RailZ")
+
+; Motor carriage block
 [node name="CarriageMesh" type="MeshInstance3D" parent="GantryX/CarriageZ"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
 mesh = SubResource("Mesh_Carriage")
 
+; Cable wire
 [node name="CableMesh" type="MeshInstance3D" parent="GantryX/CarriageZ"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, 0)
 mesh = SubResource("Mesh_Cable")
 
+; Ground reticle marker
 [node name="ReticleMarker" type="MeshInstance3D" parent="GantryX/CarriageZ"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
 mesh = SubResource("Mesh_Reticle")
 
+; --- Claw Hub Assembly ---
 [node name="ClawHub" type="Node3D" parent="GantryX/CarriageZ"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, 0)
 
 [node name="HubMesh" type="MeshInstance3D" parent="GantryX/CarriageZ/ClawHub"]
 mesh = SubResource("Mesh_Hub")
 
+; Decorative ring around hub
+[node name="HubRingMesh" type="MeshInstance3D" parent="GantryX/CarriageZ/ClawHub"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+mesh = SubResource("Mesh_HubRing")
+
+; Hub light (warm gold glow)
 [node name="HubLight" type="OmniLight3D" parent="GantryX/CarriageZ/ClawHub"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-light_color = Color(1, 0.85, 0.4, 1)
-light_energy = 1.2
-omni_range = 1.5
+light_color = Color(1, 0.88, 0.45, 1)
+light_energy = 1.5
+omni_range = 1.8
 
+; RayCast for prize detection
 [node name="RayCastDown" type="RayCast3D" parent="GantryX/CarriageZ/ClawHub"]
 target_position = Vector3(0, -1.8, 0)
 collision_mask = 2
 
+; Grip detection area
 [node name="GripArea" type="Area3D" parent="GantryX/CarriageZ/ClawHub"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 collision_layer = 0
@@ -127,9 +199,11 @@ collision_mask = 2
 [node name="GripCol" type="CollisionShape3D" parent="GantryX/CarriageZ/ClawHub/GripArea"]
 shape = SubResource("Shape_GripArea")
 
+; --- Prongs Assembly ---
 [node name="Prongs" type="Node3D" parent="GantryX/CarriageZ/ClawHub"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
 
+; Prong 1 (0°)
 [node name="Prong1" type="Node3D" parent="GantryX/CarriageZ/ClawHub/Prongs"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, 0, 0)
 
@@ -153,6 +227,7 @@ mesh = SubResource("Mesh_ProngTip")
 transform = Transform3D(0.866, -0.5, 0, 0.5, 0.866, 0, 0, 0, 1, -0.05, -0.12, 0)
 shape = SubResource("Shape_ProngTip")
 
+; Prong 2 (120°)
 [node name="Prong2" type="Node3D" parent="GantryX/CarriageZ/ClawHub/Prongs"]
 transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -0.035, 0, 0.0606)
 
@@ -176,6 +251,7 @@ mesh = SubResource("Mesh_ProngTip")
 transform = Transform3D(0.866, -0.5, 0, 0.5, 0.866, 0, 0, 0, 1, -0.05, -0.12, 0)
 shape = SubResource("Shape_ProngTip")
 
+; Prong 3 (240°)
 [node name="Prong3" type="Node3D" parent="GantryX/CarriageZ/ClawHub/Prongs"]
 transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -0.035, 0, -0.0606)
 

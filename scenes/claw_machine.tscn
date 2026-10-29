@@ -4,81 +4,227 @@
 [ext_resource type="PackedScene" path="res://scenes/claw.tscn" id="2_claw"]
 [ext_resource type="Script" path="res://scripts/prize_spawner.gd" id="3_spawner"]
 
-[sub_resource type="StandardMaterial3D" id="Mat_Podium"]
-metallic = 0.4
-roughness = 0.3
-albedo_color = Color(0.08, 0.09, 0.14, 1)
-clearcoat_enabled = true
-clearcoat = 0.6
+; =================== MATERIALS ===================
 
-[sub_resource type="BoxMesh" id="Mesh_Base"]
-material = SubResource("Mat_Podium")
-size = Vector3(2.0, 0.8, 1.8)
-
-[sub_resource type="BoxShape3D" id="Shape_Floor"]
-size = Vector3(2.0, 0.2, 1.8)
-
-[sub_resource type="StandardMaterial3D" id="Mat_FloorBed"]
+; --- Arcade Cabinet Body (dark matte metal with subtle blue tint) ---
+[sub_resource type="StandardMaterial3D" id="Mat_Cabinet"]
 metallic = 0.6
-roughness = 0.4
-albedo_color = Color(0.12, 0.14, 0.2, 1)
+roughness = 0.35
+albedo_color = Color(0.06, 0.07, 0.12, 1)
+clearcoat_enabled = true
+clearcoat = 0.3
 
-[sub_resource type="BoxMesh" id="Mesh_FloorBed"]
-material = SubResource("Mat_FloorBed")
-size = Vector3(1.7, 0.05, 1.5)
+; --- Base Podium (brushed dark steel) ---
+[sub_resource type="StandardMaterial3D" id="Mat_Podium"]
+metallic = 0.75
+roughness = 0.28
+albedo_color = Color(0.05, 0.06, 0.1, 1)
+clearcoat_enabled = true
+clearcoat = 0.5
 
+; --- Floor Bed (soft dark plush velvet look) ---
+[sub_resource type="StandardMaterial3D" id="Mat_FloorBed"]
+metallic = 0.05
+roughness = 0.9
+albedo_color = Color(0.08, 0.06, 0.18, 1)
+
+; --- Floor Trim (subtle gold edge) ---
+[sub_resource type="StandardMaterial3D" id="Mat_FloorTrim"]
+metallic = 0.85
+roughness = 0.2
+albedo_color = Color(0.9, 0.75, 0.25, 1)
+clearcoat_enabled = true
+clearcoat = 0.8
+
+; --- Corner Pillars (chrome with cyan glow strip) ---
+[sub_resource type="StandardMaterial3D" id="Mat_Pillar"]
+metallic = 0.9
+roughness = 0.15
+albedo_color = Color(0.7, 0.75, 0.82, 1)
+
+; --- Neon Cyan Accent ---
 [sub_resource type="StandardMaterial3D" id="Mat_NeonCyan"]
 emission_enabled = true
 emission = Color(0.0, 0.85, 1.0, 1)
-emission_energy_multiplier = 4.0
+emission_energy_multiplier = 5.0
+albedo_color = Color(0.0, 0.6, 0.8, 1)
 
-[sub_resource type="CylinderMesh" id="Mesh_Pillar"]
-material = SubResource("Mat_NeonCyan")
-top_radius = 0.025
-bottom_radius = 0.025
-height = 2.2
-
+; --- Neon Pink Accent ---
 [sub_resource type="StandardMaterial3D" id="Mat_NeonPink"]
 emission_enabled = true
 emission = Color(1.0, 0.1, 0.6, 1)
 emission_energy_multiplier = 4.0
+albedo_color = Color(0.8, 0.1, 0.5, 1)
 
-[sub_resource type="BoxMesh" id="Mesh_Marquee"]
-material = SubResource("Mat_Podium")
-size = Vector3(2.0, 0.4, 1.8)
+; --- Neon Purple Accent ---
+[sub_resource type="StandardMaterial3D" id="Mat_NeonPurple"]
+emission_enabled = true
+emission = Color(0.55, 0.2, 1.0, 1)
+emission_energy_multiplier = 3.5
+albedo_color = Color(0.4, 0.15, 0.75, 1)
 
+; --- Glass (realistic glass panel with faint reflections) ---
 [sub_resource type="StandardMaterial3D" id="Mat_Glass"]
 transparency = 1
-albedo_color = Color(0.85, 0.95, 1.0, 0.12)
-roughness = 0.05
+albedo_color = Color(0.88, 0.94, 1.0, 0.1)
+metallic = 0.3
+roughness = 0.02
 refraction_enabled = true
-refraction_scale = 0.015
+refraction_scale = 0.02
+rim_enabled = true
+rim = 0.3
+rim_tint = 0.1
 
+; --- Marquee Canopy (dark with gold trim feel) ---
+[sub_resource type="StandardMaterial3D" id="Mat_Marquee"]
+metallic = 0.5
+roughness = 0.3
+albedo_color = Color(0.04, 0.05, 0.1, 1)
+clearcoat_enabled = true
+clearcoat = 0.4
+
+; --- Chute (gold metallic) ---
+[sub_resource type="StandardMaterial3D" id="Mat_Chute"]
+metallic = 0.88
+roughness = 0.18
+albedo_color = Color(0.95, 0.78, 0.15, 1)
+clearcoat_enabled = true
+clearcoat = 1.0
+
+; --- Chute Interior (dark) ---
+[sub_resource type="StandardMaterial3D" id="Mat_ChuteInner"]
+metallic = 0.3
+roughness = 0.7
+albedo_color = Color(0.03, 0.03, 0.06, 1)
+
+; --- LED Strip Material (subtle underglow) ---
+[sub_resource type="StandardMaterial3D" id="Mat_LEDStrip"]
+emission_enabled = true
+emission = Color(0.0, 0.7, 1.0, 1)
+emission_energy_multiplier = 3.0
+albedo_color = Color(0.0, 0.5, 0.8, 1)
+
+; --- Wall Backpanel (dark interior wall) ---
+[sub_resource type="StandardMaterial3D" id="Mat_BackWall"]
+metallic = 0.1
+roughness = 0.85
+albedo_color = Color(0.04, 0.04, 0.08, 1)
+
+; --- Confetti Material ---
+[sub_resource type="StandardMaterial3D" id="Mat_Confetti"]
+albedo_color = Color(1, 0.8, 0.2, 1)
+emission_enabled = true
+emission = Color(1, 0.8, 0.2, 1)
+emission_energy_multiplier = 2.5
+
+; =================== MESHES ===================
+
+; Base Podium
+[sub_resource type="BoxMesh" id="Mesh_Base"]
+material = SubResource("Mat_Podium")
+size = Vector3(2.1, 0.85, 1.9)
+
+; Base Trim (gold edge around base)
+[sub_resource type="BoxMesh" id="Mesh_BaseTrim"]
+material = SubResource("Mat_FloorTrim")
+size = Vector3(2.14, 0.04, 1.94)
+
+; Floor Bed
+[sub_resource type="BoxMesh" id="Mesh_FloorBed"]
+material = SubResource("Mat_FloorBed")
+size = Vector3(1.72, 0.06, 1.52)
+
+; Floor Bed Border (gold trim inset)
+[sub_resource type="BoxMesh" id="Mesh_FloorBorder"]
+material = SubResource("Mat_FloorTrim")
+size = Vector3(1.78, 0.025, 1.58)
+
+; Corner Pillars
+[sub_resource type="CylinderMesh" id="Mesh_Pillar"]
+material = SubResource("Mat_Pillar")
+top_radius = 0.032
+bottom_radius = 0.032
+height = 2.2
+
+; Neon strip on pillars
+[sub_resource type="CylinderMesh" id="Mesh_NeonStrip"]
+material = SubResource("Mat_NeonCyan")
+top_radius = 0.018
+bottom_radius = 0.018
+height = 2.1
+
+; Marquee Canopy
+[sub_resource type="BoxMesh" id="Mesh_Marquee"]
+material = SubResource("Mat_Marquee")
+size = Vector3(2.1, 0.42, 1.9)
+
+; Marquee Trim (gold around the marquee top)
+[sub_resource type="BoxMesh" id="Mesh_MarqueeTrim"]
+material = SubResource("Mat_FloorTrim")
+size = Vector3(2.14, 0.035, 1.94)
+
+; Glass panels
 [sub_resource type="BoxMesh" id="Mesh_GlassFront"]
 material = SubResource("Mat_Glass")
-size = Vector3(1.7, 2.0, 0.02)
+size = Vector3(1.72, 2.05, 0.015)
 
 [sub_resource type="BoxMesh" id="Mesh_GlassSide"]
 material = SubResource("Mat_Glass")
-size = Vector3(0.02, 2.0, 1.5)
+size = Vector3(0.015, 2.05, 1.52)
 
-[sub_resource type="BoxShape3D" id="Shape_WallZ"]
-size = Vector3(1.8, 2.2, 0.1)
+; Back panel (solid wall, not glass)
+[sub_resource type="BoxMesh" id="Mesh_BackPanel"]
+material = SubResource("Mat_BackWall")
+size = Vector3(1.72, 2.05, 0.04)
 
-[sub_resource type="BoxShape3D" id="Shape_WallX"]
-size = Vector3(0.1, 2.2, 1.6)
+; LED underglow strip mesh
+[sub_resource type="BoxMesh" id="Mesh_LEDStripFront"]
+material = SubResource("Mat_LEDStrip")
+size = Vector3(1.6, 0.025, 0.025)
 
-[sub_resource type="StandardMaterial3D" id="Mat_Chute"]
-metallic = 0.8
-roughness = 0.25
-albedo_color = Color(0.9, 0.7, 0.1, 1)
+[sub_resource type="BoxMesh" id="Mesh_LEDStripSide"]
+material = SubResource("Mat_LEDStrip")
+size = Vector3(0.025, 0.025, 1.4)
 
+; Chute components
 [sub_resource type="BoxMesh" id="Mesh_ChuteRim"]
 material = SubResource("Mat_Chute")
-size = Vector3(0.44, 0.08, 0.44)
+size = Vector3(0.48, 0.1, 0.48)
+
+[sub_resource type="BoxMesh" id="Mesh_ChuteInner"]
+material = SubResource("Mat_ChuteInner")
+size = Vector3(0.38, 0.12, 0.38)
+
+; Chute funnel sides
+[sub_resource type="BoxMesh" id="Mesh_ChuteSide1"]
+material = SubResource("Mat_Chute")
+size = Vector3(0.48, 0.35, 0.03)
+
+[sub_resource type="BoxMesh" id="Mesh_ChuteSide2"]
+material = SubResource("Mat_Chute")
+size = Vector3(0.03, 0.35, 0.48)
+
+; Decorative corner caps
+[sub_resource type="SphereMesh" id="Mesh_CornerCap"]
+material = SubResource("Mat_FloorTrim")
+radius = 0.05
+height = 0.1
+
+; =================== COLLISION SHAPES ===================
+
+[sub_resource type="BoxShape3D" id="Shape_Floor"]
+size = Vector3(2.1, 0.2, 1.9)
+
+[sub_resource type="BoxShape3D" id="Shape_WallZ"]
+size = Vector3(1.9, 2.3, 0.1)
+
+[sub_resource type="BoxShape3D" id="Shape_WallX"]
+size = Vector3(0.1, 2.3, 1.7)
 
 [sub_resource type="BoxShape3D" id="Shape_ChuteArea"]
 size = Vector3(0.42, 0.4, 0.42)
+
+; =================== PARTICLES ===================
 
 [sub_resource type="ParticleProcessMaterial" id="Part_ConfettiMat"]
 direction = Vector3(0, 1, 0)
@@ -91,23 +237,41 @@ gravity = Vector3(0, -6.5, 0)
 scale_min = 0.05
 scale_max = 0.12
 
-[sub_resource type="StandardMaterial3D" id="Mat_Confetti"]
-albedo_color = Color(1, 0.8, 0.2, 1)
-emission_enabled = true
-emission = Color(1, 0.8, 0.2, 1)
-emission_energy_multiplier = 2.0
-
 [sub_resource type="QuadMesh" id="Mesh_ConfettiQuad"]
 material = SubResource("Mat_Confetti")
 size = Vector2(0.08, 0.08)
 
+; =================== SCENE TREE ===================
+
 [node name="ClawMachine" type="Node3D"]
 script = ExtResource("1_machine")
 
+; --- Base Podium ---
 [node name="BasePodium" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425, 0)
 mesh = SubResource("Mesh_Base")
 
+; Gold trim at base top edge
+[node name="BaseTrimTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+mesh = SubResource("Mesh_BaseTrim")
+
+; Gold trim at base bottom edge
+[node name="BaseTrimBottom" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.84, 0)
+mesh = SubResource("Mesh_BaseTrim")
+
+; --- Floor Bed (plush velvet surface) ---
+[node name="FloorBed" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0)
+mesh = SubResource("Mesh_FloorBed")
+
+; Floor gold border
+[node name="FloorBorder" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+mesh = SubResource("Mesh_FloorBorder")
+
+; --- Static Body (Walls & Floor Collisions) ---
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 
 [node name="FloorCol" type="CollisionShape3D" parent="StaticBody3D"]
@@ -115,69 +279,137 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 shape = SubResource("Shape_Floor")
 
 [node name="WallFront" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0.85)
 shape = SubResource("Shape_WallZ")
 
 [node name="WallBack" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -0.85)
 shape = SubResource("Shape_WallZ")
 
 [node name="WallLeft" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.95, 1.1, 0)
 shape = SubResource("Shape_WallX")
 
 [node name="WallRight" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 1.1, 0)
 shape = SubResource("Shape_WallX")
 
-[node name="FloorBed" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
-mesh = SubResource("Mesh_FloorBed")
-
+; --- Corner Pillars (chrome + neon accent) ---
 [node name="PillarFL" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, 1.1, 0.78)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.1, 0.8)
 mesh = SubResource("Mesh_Pillar")
+
+[node name="NeonFL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.1, 0.84)
+mesh = SubResource("Mesh_NeonStrip")
 
 [node name="PillarFR" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, 1.1, 0.78)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.1, 0.8)
 mesh = SubResource("Mesh_Pillar")
+
+[node name="NeonFR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.1, 0.84)
+mesh = SubResource("Mesh_NeonStrip")
 
 [node name="PillarBL" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, 1.1, -0.78)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.1, -0.8)
 mesh = SubResource("Mesh_Pillar")
+
+[node name="NeonBL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94, 1.1, -0.8)
+mesh = SubResource("Mesh_NeonStrip")
 
 [node name="PillarBR" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, 1.1, -0.78)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.1, -0.8)
 mesh = SubResource("Mesh_Pillar")
 
+[node name="NeonBR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.94, 1.1, -0.8)
+mesh = SubResource("Mesh_NeonStrip")
+
+; --- Decorative corner caps (gold balls at top of pillars) ---
+[node name="CapFL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 2.22, 0.8)
+mesh = SubResource("Mesh_CornerCap")
+
+[node name="CapFR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 2.22, 0.8)
+mesh = SubResource("Mesh_CornerCap")
+
+[node name="CapBL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 2.22, -0.8)
+mesh = SubResource("Mesh_CornerCap")
+
+[node name="CapBR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 2.22, -0.8)
+mesh = SubResource("Mesh_CornerCap")
+
+; --- Marquee Canopy ---
 [node name="MarqueeCanopy" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.32, 0)
 mesh = SubResource("Mesh_Marquee")
 
+; Marquee gold trim
+[node name="MarqueeTrimTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.545, 0)
+mesh = SubResource("Mesh_MarqueeTrim")
+
+[node name="MarqueeTrimBottom" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+mesh = SubResource("Mesh_MarqueeTrim")
+
+; --- Marquee Text ---
 [node name="MarqueeText" type="Label3D" parent="MarqueeCanopy"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.91)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0, 0.96)
 text = "★ C L A W ★"
 font_size = 72
-modulate = Color(1, 0.85, 0.1, 1)
-outline_modulate = Color(1, 0.1, 0.6, 1)
-outline_size = 18
+modulate = Color(1, 0.88, 0.15, 1)
+outline_modulate = Color(1, 0.15, 0.6, 1)
+outline_size = 20
 
+[node name="MarqueeTextBack" type="Label3D" parent="MarqueeCanopy"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0.0, -0.96)
+text = "★ C L A W ★"
+font_size = 72
+modulate = Color(1, 0.88, 0.15, 1)
+outline_modulate = Color(1, 0.15, 0.6, 1)
+outline_size = 20
+
+; --- Glass Panels ---
 [node name="GlassFront" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0.78)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0.8)
 mesh = SubResource("Mesh_GlassFront")
 
 [node name="GlassBack" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -0.78)
-mesh = SubResource("Mesh_GlassFront")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -0.8)
+mesh = SubResource("Mesh_BackPanel")
 
 [node name="GlassLeft" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, 1.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.1, 0)
 mesh = SubResource("Mesh_GlassSide")
 
 [node name="GlassRight" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, 1.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.1, 0)
 mesh = SubResource("Mesh_GlassSide")
 
+; --- LED Underglow Strips ---
+[node name="LEDStripFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.005, 0.78)
+mesh = SubResource("Mesh_LEDStripFront")
+
+[node name="LEDStripBack" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.005, -0.78)
+mesh = SubResource("Mesh_LEDStripFront")
+
+[node name="LEDStripLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, 0.005, 0)
+mesh = SubResource("Mesh_LEDStripSide")
+
+[node name="LEDStripRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, 0.005, 0)
+mesh = SubResource("Mesh_LEDStripSide")
+
+; --- Interior Lighting ---
 [node name="ReflectionProbe" type="ReflectionProbe" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 size = Vector3(2.5, 2.5, 2.5)
@@ -185,21 +417,61 @@ interior = true
 
 [node name="SpotLightInterior" type="SpotLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.15, 0)
-light_color = Color(1, 0.95, 0.88, 1)
-light_energy = 2.8
+light_color = Color(1, 0.96, 0.9, 1)
+light_energy = 3.2
 spot_range = 3.5
 spot_angle = 55.0
+shadow_enabled = true
 
+; Secondary spotlight (warm) for depth
+[node name="SpotLightWarm" type="SpotLight3D" parent="."]
+transform = Transform3D(0.707, 0, -0.707, 0, 1, 0, 0.707, 0, 0.707, 0.7, 2.15, 0.5)
+light_color = Color(1, 0.85, 0.65, 1)
+light_energy = 1.5
+spot_range = 3.0
+spot_angle = 45.0
+
+; Ambient fill from below (subtle)
+[node name="FillLightBelow" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+light_color = Color(0.15, 0.25, 0.6, 1)
+light_energy = 0.6
+omni_range = 2.0
+
+; --- Chute Assembly ---
 [node name="ChuteRim" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.05, 0.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.06, 0.55)
 mesh = SubResource("Mesh_ChuteRim")
 
-[node name="ChuteLight" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.25, 0.55)
-light_color = Color(0.2, 0.9, 1, 1)
-light_energy = 1.0
-omni_range = 1.0
+[node name="ChuteInner" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.04, 0.55)
+mesh = SubResource("Mesh_ChuteInner")
 
+; Chute funnel walls
+[node name="ChuteSideFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.27, 0.78)
+mesh = SubResource("Mesh_ChuteSide1")
+
+[node name="ChuteSideBack" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.27, 0.32)
+mesh = SubResource("Mesh_ChuteSide1")
+
+[node name="ChuteSideLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, 0.27, 0.55)
+mesh = SubResource("Mesh_ChuteSide2")
+
+[node name="ChuteSideRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 0.27, 0.55)
+mesh = SubResource("Mesh_ChuteSide2")
+
+; Chute glowing light
+[node name="ChuteLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.3, 0.55)
+light_color = Color(0.1, 0.95, 0.6, 1)
+light_energy = 1.2
+omni_range = 1.2
+
+; --- Chute Detection Area ---
 [node name="ChuteArea" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.1, 0.55)
 collision_layer = 0
@@ -208,17 +480,20 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ChuteArea"]
 shape = SubResource("Shape_ChuteArea")
 
+; --- Confetti ---
 [node name="ConfettiParticles" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.15, 0.55)
 emitting = false
-amount = 45
-lifetime = 1.2
+amount = 60
+lifetime = 1.5
 one_shot = true
-explosiveness = 0.9
+explosiveness = 0.95
 process_material = SubResource("Part_ConfettiMat")
 draw_pass_1 = SubResource("Mesh_ConfettiQuad")
 
+; --- Claw (instanced sub-scene) ---
 [node name="Claw" parent="." instance=ExtResource("2_claw")]
 
+; --- Prize Spawner ---
 [node name="PrizeSpawner" type="Node3D" parent="."]
 script = ExtResource("3_spawner")

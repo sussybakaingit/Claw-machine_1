@@ -5,6 +5,7 @@ class_name GameRoot
 @onready var claw_machine: ClawMachine = $ClawMachine
 @onready var calibration_menu: CalibrationMenu = $Calibration
 @onready var hud: HUD = $HUD
+@onready var camera_controller: CameraController = $Camera3D if $Camera3D is CameraController else null
 
 func _ready() -> void:
 	SettingsManager.graphics_changed.connect(_on_graphics_changed)
@@ -23,6 +24,10 @@ func _ready() -> void:
 			calibration_menu.visible = false
 			calibration_menu.set_process(false)
 		GameManager.start_game_round(GameManager.round_duration)
+	
+	# Connect camera view changes to HUD notification
+	if camera_controller:
+		camera_controller.camera_changed.connect(_on_camera_changed)
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
@@ -35,3 +40,8 @@ func _on_calibration_finished() -> void:
 func _on_graphics_changed() -> void:
 	if world_env and world_env.environment:
 		SettingsManager.apply_environment_settings(world_env.environment)
+
+func _on_camera_changed(view_name: String) -> void:
+	# Show camera view notification on HUD
+	if hud and hud.has_method("show_camera_notification"):
+		hud.show_camera_notification(view_name)

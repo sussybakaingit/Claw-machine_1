@@ -13,8 +13,11 @@ class_name HUD
 @onready var landmark_drawer: Control = $CameraPreviewPanel/VBox/LandmarkCanvas
 @onready var fps_label: Label = $FPSLabel
 @onready var error_banner: PanelContainer = $ErrorBanner if has_node("ErrorBanner") else null
+@onready var camera_view_label: Label = $CameraViewLabel if has_node("CameraViewLabel") else null
+@onready var camera_hint_label: Label = $CameraHintLabel if has_node("CameraHintLabel") else null
 
 var _countdown_active: bool = false
+var _cam_notification_tween: Tween = null
 
 func _ready() -> void:
 	GameManager.score_changed.connect(_on_score_changed)
@@ -28,12 +31,70 @@ func _ready() -> void:
 	if has_node("CountdownOverlay"):
 		countdown_panel.visible = false
 	
+	# Set up camera view notification label
+	_setup_camera_ui()
+	
 	_on_settings_changed()
 	_update_tracking_ui()
 	_on_score_changed(GameManager.current_score)
 	_on_time_updated(GameManager.time_left)
 	if GameManager.current_state == GameManager.GameState.COUNTDOWN:
 		run_countdown()
+
+func _setup_camera_ui() -> void:
+	# Create camera view notification label if not in scene
+	if not camera_view_label:
+		camera_view_label = Label.new()
+		camera_view_label.name = "CameraViewLabel"
+		camera_view_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		camera_view_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		camera_view_label.anchors_preset = Control.PRESET_CENTER_BOTTOM
+		camera_view_label.anchor_left = 0.5
+		camera_view_label.anchor_top = 1.0
+		camera_view_label.anchor_right = 0.5
+		camera_view_label.anchor_bottom = 1.0
+		camera_view_label.offset_left = -150
+		camera_view_label.offset_top = -80
+		camera_view_label.offset_right = 150
+		camera_view_label.offset_bottom = -50
+		camera_view_label.add_theme_font_size_override("font_size", 18)
+		camera_view_label.add_theme_color_override("font_color", Color(0.3, 0.9, 1.0, 1.0))
+		camera_view_label.modulate.a = 0.0
+		add_child(camera_view_label)
+	
+	# Camera hint label (always visible)
+	if not camera_hint_label:
+		camera_hint_label = Label.new()
+		camera_hint_label.name = "CameraHintLabel"
+		camera_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		camera_hint_label.anchors_preset = Control.PRESET_BOTTOM_RIGHT
+		camera_hint_label.anchor_left = 1.0
+		camera_hint_label.anchor_top = 1.0
+		camera_hint_label.anchor_right = 1.0
+		camera_hint_label.anchor_bottom = 1.0
+		camera_hint_label.offset_left = -220
+		camera_hint_label.offset_top = -30
+		camera_hint_label.offset_right = -12
+		camera_hint_label.offset_bottom = -8
+		camera_hint_label.add_theme_font_size_override("font_size", 11)
+		camera_hint_label.add_theme_color_override("font_color", Color(0.5, 0.6, 0.8, 0.5))
+		camera_hint_label.text = "TAB: Cycle Camera  |  1-5: Views"
+		add_child(camera_hint_label)
+
+func show_camera_notification(view_name: String) -> void:
+	if not camera_view_label:
+		return
+	
+	camera_view_label.text = "📷 %s View" % view_name
+	camera_view_label.modulate.a = 1.0
+	camera_view_label.scale = Vector2(1.3, 1.3)
+	
+	if _cam_notification_tween and _cam_notification_tween.is_valid():
+		_cam_notification_tween.kill()
+	
+	_cam_notification_tween = create_tween().set_parallel(true)
+	_cam_notification_tween.tween_property(camera_view_label, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_cam_notification_tween.tween_property(camera_view_label, "modulate:a", 0.0, 2.0).set_delay(0.8)
 
 func _on_settings_changed() -> void:
 	if camera_preview_panel:

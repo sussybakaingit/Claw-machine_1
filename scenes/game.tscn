@@ -6,13 +6,15 @@
 [ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="4_pause"]
 [ext_resource type="PackedScene" path="res://scenes/results.tscn" id="5_results"]
 [ext_resource type="PackedScene" path="res://scenes/calibration.tscn" id="6_calib"]
-[ext_resource type="Script" path="res://scripts/camera_sway.gd" id="7_sway"]
+[ext_resource type="Script" path="res://scripts/camera_controller.gd" id="7_cam"]
+
+; =================== SKY & ENVIRONMENT ===================
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
-sky_top_color = Color(0.04, 0.05, 0.08, 1)
-sky_horizon_color = Color(0.1, 0.12, 0.18, 1)
-ground_bottom_color = Color(0.02, 0.03, 0.05, 1)
-ground_horizon_color = Color(0.08, 0.1, 0.15, 1)
+sky_top_color = Color(0.02, 0.025, 0.05, 1)
+sky_horizon_color = Color(0.06, 0.08, 0.14, 1)
+ground_bottom_color = Color(0.01, 0.015, 0.03, 1)
+ground_horizon_color = Color(0.05, 0.07, 0.12, 1)
 
 [sub_resource type="Sky" id="Sky_1"]
 sky_material = SubResource("ProceduralSkyMaterial_1")
@@ -21,19 +23,76 @@ sky_material = SubResource("ProceduralSkyMaterial_1")
 background_mode = 2
 sky = SubResource("Sky_1")
 ambient_light_source = 2
-ambient_light_color = Color(0.12, 0.15, 0.22, 1)
-ambient_light_energy = 0.8
+ambient_light_color = Color(0.08, 0.1, 0.18, 1)
+ambient_light_energy = 0.6
 tonemap_mode = 2
+tonemap_white = 1.2
 ssao_enabled = true
+ssao_radius = 1.5
+ssao_intensity = 1.5
 glow_enabled = true
-glow_intensity = 0.8
-glow_bloom = 0.25
+glow_intensity = 1.0
+glow_strength = 0.8
+glow_bloom = 0.35
 glow_blend_mode = 1
+glow_hdr_threshold = 0.8
 
 [sub_resource type="CameraAttributesPractical" id="CamAttrib_1"]
 dof_blur_far_enabled = true
-dof_blur_far_distance = 6.0
-dof_blur_far_transition = 2.0
+dof_blur_far_distance = 7.0
+dof_blur_far_transition = 3.0
+
+; =================== ARCADE ROOM MATERIALS ===================
+
+; Floor material (dark glossy)
+[sub_resource type="StandardMaterial3D" id="Mat_ArcadeFloor"]
+metallic = 0.3
+roughness = 0.5
+albedo_color = Color(0.03, 0.03, 0.06, 1)
+
+; Wall material
+[sub_resource type="StandardMaterial3D" id="Mat_ArcadeWall"]
+metallic = 0.1
+roughness = 0.8
+albedo_color = Color(0.04, 0.05, 0.09, 1)
+
+; Neon strip for room decoration
+[sub_resource type="StandardMaterial3D" id="Mat_RoomNeonPink"]
+emission_enabled = true
+emission = Color(1.0, 0.1, 0.55, 1)
+emission_energy_multiplier = 3.0
+albedo_color = Color(0.8, 0.1, 0.45, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_RoomNeonCyan"]
+emission_enabled = true
+emission = Color(0.0, 0.8, 1.0, 1)
+emission_energy_multiplier = 3.0
+albedo_color = Color(0.0, 0.6, 0.8, 1)
+
+; =================== ARCADE ROOM MESHES ===================
+
+[sub_resource type="BoxMesh" id="Mesh_ArcadeFloor"]
+material = SubResource("Mat_ArcadeFloor")
+size = Vector3(12, 0.05, 12)
+
+[sub_resource type="BoxMesh" id="Mesh_BackWall"]
+material = SubResource("Mat_ArcadeWall")
+size = Vector3(12, 5, 0.1)
+
+[sub_resource type="BoxMesh" id="Mesh_SideWall"]
+material = SubResource("Mat_ArcadeWall")
+size = Vector3(0.1, 5, 12)
+
+; Neon strips on walls
+[sub_resource type="BoxMesh" id="Mesh_WallNeonH"]
+material = SubResource("Mat_RoomNeonPink")
+size = Vector3(10, 0.03, 0.03)
+
+[sub_resource type="BoxMesh" id="Mesh_WallNeonV"]
+material = SubResource("Mat_RoomNeonCyan")
+size = Vector3(0.03, 3.5, 0.03)
+
+; =================== SCENE TREE ===================
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_game")
@@ -42,33 +101,89 @@ script = ExtResource("1_game")
 environment = SubResource("Environment_Arcade")
 camera_attributes = SubResource("CamAttrib_1")
 
+; --- Key Lighting ---
+
+; Main directional (moonlight cool)
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 2.5, 4, 3)
-light_color = Color(0.9, 0.95, 1, 1)
-light_energy = 0.9
+light_color = Color(0.85, 0.9, 1, 1)
+light_energy = 0.6
 shadow_enabled = true
 shadow_bias = 0.03
+directional_shadow_max_distance = 15.0
 
-[node name="RoomLightLeft" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 2.0, 1.0)
-light_color = Color(0.8, 0.1, 0.6, 1)
+; Neon ambient lights (arcade atmosphere)
+[node name="RoomLightPink" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 2.5, 0.5)
+light_color = Color(1, 0.1, 0.55, 1)
+light_energy = 1.8
+omni_range = 5.0
+
+[node name="RoomLightCyan" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2.5, 0.5)
+light_color = Color(0.0, 0.7, 1.0, 1)
+light_energy = 1.8
+omni_range = 5.0
+
+[node name="RoomLightPurple" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -2.0)
+light_color = Color(0.5, 0.2, 0.9, 1)
 light_energy = 1.2
+omni_range = 6.0
+
+; Warm fill from below
+[node name="FloorFill" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 1.5)
+light_color = Color(0.3, 0.15, 0.6, 1)
+light_energy = 0.8
 omni_range = 4.0
 
-[node name="RoomLightRight" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 2.0, 1.0)
-light_color = Color(0.1, 0.7, 1.0, 1)
-light_energy = 1.2
-omni_range = 4.0
+; --- Arcade Room ---
 
+[node name="ArcadeFloor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.88, 0)
+mesh = SubResource("Mesh_ArcadeFloor")
+
+[node name="BackWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -3.0)
+mesh = SubResource("Mesh_BackWall")
+
+[node name="LeftWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.0, 1.6, 0)
+mesh = SubResource("Mesh_SideWall")
+
+[node name="RightWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0, 1.6, 0)
+mesh = SubResource("Mesh_SideWall")
+
+; Neon wall decorations
+[node name="WallNeonH1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -2.93)
+mesh = SubResource("Mesh_WallNeonH")
+
+[node name="WallNeonH2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -2.93)
+mesh = SubResource("Mesh_WallNeonH")
+
+[node name="WallNeonVL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.93, 2.0, 0)
+mesh = SubResource("Mesh_WallNeonV")
+
+[node name="WallNeonVR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.93, 2.0, 0)
+mesh = SubResource("Mesh_WallNeonV")
+
+; --- Camera (with camera controller for switchable views) ---
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 2.05, 2.45)
 current = true
 fov = 52.0
-script = ExtResource("7_sway")
+script = ExtResource("7_cam")
 
+; --- Claw Machine ---
 [node name="ClawMachine" parent="." instance=ExtResource("2_machine")]
 
+; --- UI Layers ---
 [node name="HUD" parent="." instance=ExtResource("3_hud")]
 
 [node name="PauseMenu" parent="." instance=ExtResource("4_pause")]
