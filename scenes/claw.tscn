@@ -1,0 +1,189 @@
+[gd_scene format=3 uid="uid://c8v3w1claw01"]
+
+[ext_resource type="Script" path="res://scripts/claw_controller.gd" id="1_claw"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_Chrome"]
+metallic = 0.95
+roughness = 0.15
+albedo_color = Color(0.85, 0.88, 0.92, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_RailX"]
+material = SubResource("Mat_Chrome")
+size = Vector3(1.7, 0.04, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="Mat_Motor"]
+metallic = 0.7
+roughness = 0.3
+albedo_color = Color(0.18, 0.2, 0.24, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_Carriage"]
+material = SubResource("Mat_Motor")
+size = Vector3(0.16, 0.08, 0.16)
+
+[sub_resource type="StandardMaterial3D" id="Mat_Cable"]
+metallic = 0.8
+roughness = 0.4
+albedo_color = Color(0.3, 0.32, 0.35, 1)
+
+[sub_resource type="CylinderMesh" id="Mesh_Cable"]
+material = SubResource("Mat_Cable")
+top_radius = 0.008
+bottom_radius = 0.008
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_Hub"]
+metallic = 0.85
+roughness = 0.2
+albedo_color = Color(0.98, 0.75, 0.1, 1)
+clearcoat_enabled = true
+clearcoat = 1.0
+
+[sub_resource type="CylinderMesh" id="Mesh_Hub"]
+material = SubResource("Mat_Hub")
+top_radius = 0.07
+bottom_radius = 0.09
+height = 0.08
+
+[sub_resource type="StandardMaterial3D" id="Mat_NeonGold"]
+emission_enabled = true
+emission = Color(1, 0.8, 0.2, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="TorusMesh" id="Mesh_Reticle"]
+material = SubResource("Mat_NeonGold")
+inner_radius = 0.12
+outer_radius = 0.14
+
+[sub_resource type="StandardMaterial3D" id="Mat_Prong"]
+metallic = 0.92
+roughness = 0.2
+albedo_color = Color(0.95, 0.85, 0.3, 1)
+
+[sub_resource type="CapsuleMesh" id="Mesh_ProngUpper"]
+material = SubResource("Mat_Prong")
+radius = 0.015
+height = 0.22
+
+[sub_resource type="CapsuleShape3D" id="Shape_ProngUpper"]
+radius = 0.022
+height = 0.22
+
+[sub_resource type="CapsuleMesh" id="Mesh_ProngTip"]
+material = SubResource("Mat_Prong")
+radius = 0.014
+height = 0.16
+
+[sub_resource type="CapsuleShape3D" id="Shape_ProngTip"]
+radius = 0.02
+height = 0.16
+
+[node name="Claw" type="Node3D"]
+script = ExtResource("1_claw")
+
+[node name="GantryX" type="Node3D" parent="."]
+
+[node name="RailMeshX" type="MeshInstance3D" parent="GantryX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+mesh = SubResource("Mesh_RailX")
+
+[node name="CarriageZ" type="Node3D" parent="GantryX"]
+
+[node name="CarriageMesh" type="MeshInstance3D" parent="GantryX/CarriageZ"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+mesh = SubResource("Mesh_Carriage")
+
+[node name="CableMesh" type="MeshInstance3D" parent="GantryX/CarriageZ"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, 0)
+mesh = SubResource("Mesh_Cable")
+
+[node name="ReticleMarker" type="MeshInstance3D" parent="GantryX/CarriageZ"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+mesh = SubResource("Mesh_Reticle")
+
+[node name="ClawHub" type="Node3D" parent="GantryX/CarriageZ"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, 0)
+
+[node name="HubMesh" type="MeshInstance3D" parent="GantryX/CarriageZ/ClawHub"]
+mesh = SubResource("Mesh_Hub")
+
+[node name="HubLight" type="OmniLight3D" parent="GantryX/CarriageZ/ClawHub"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+light_color = Color(1, 0.85, 0.4, 1)
+light_energy = 1.2
+omni_range = 1.5
+
+[node name="RayCastDown" type="RayCast3D" parent="GantryX/CarriageZ/ClawHub"]
+target_position = Vector3(0, -1.8, 0)
+collision_mask = 2
+
+[node name="Prongs" type="Node3D" parent="GantryX/CarriageZ/ClawHub"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+
+[node name="Prong1" type="Node3D" parent="GantryX/CarriageZ/ClawHub/Prongs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, 0, 0)
+
+[node name="ProngBody" type="AnimatableBody3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong1"]
+transform = Transform3D(0.9659, 0.2588, 0, -0.2588, 0.9659, 0, 0, 0, 1, 0.05, -0.1, 0)
+collision_layer = 4
+collision_mask = 2
+sync_to_physics = false
+
+[node name="UpperMesh" type="MeshInstance3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong1/ProngBody"]
+mesh = SubResource("Mesh_ProngUpper")
+
+[node name="UpperCol" type="CollisionShape3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong1/ProngBody"]
+shape = SubResource("Shape_ProngUpper")
+
+[node name="TipMesh" type="MeshInstance3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong1/ProngBody"]
+transform = Transform3D(0.866, -0.5, 0, 0.5, 0.866, 0, 0, 0, 1, -0.05, -0.12, 0)
+mesh = SubResource("Mesh_ProngTip")
+
+[node name="TipCol" type="CollisionShape3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong1/ProngBody"]
+transform = Transform3D(0.866, -0.5, 0, 0.5, 0.866, 0, 0, 0, 1, -0.05, -0.12, 0)
+shape = SubResource("Shape_ProngTip")
+
+[node name="Prong2" type="Node3D" parent="GantryX/CarriageZ/ClawHub/Prongs"]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -0.035, 0, 0.0606)
+
+[node name="ProngBody" type="AnimatableBody3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong2"]
+transform = Transform3D(0.9659, 0.2588, 0, -0.2588, 0.9659, 0, 0, 0, 1, 0.05, -0.1, 0)
+collision_layer = 4
+collision_mask = 2
+sync_to_physics = false
+
+[node name="UpperMesh" type="MeshInstance3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong2/ProngBody"]
+mesh = SubResource("Mesh_ProngUpper")
+
+[node name="UpperCol" type="CollisionShape3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong2/ProngBody"]
+shape = SubResource("Shape_ProngUpper")
+
+[node name="TipMesh" type="MeshInstance3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong2/ProngBody"]
+transform = Transform3D(0.866, -0.5, 0, 0.5, 0.866, 0, 0, 0, 1, -0.05, -0.12, 0)
+mesh = SubResource("Mesh_ProngTip")
+
+[node name="TipCol" type="CollisionShape3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong2/ProngBody"]
+transform = Transform3D(0.866, -0.5, 0, 0.5, 0.866, 0, 0, 0, 1, -0.05, -0.12, 0)
+shape = SubResource("Shape_ProngTip")
+
+[node name="Prong3" type="Node3D" parent="GantryX/CarriageZ/ClawHub/Prongs"]
+transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -0.035, 0, -0.0606)
+
+[node name="ProngBody" type="AnimatableBody3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong3"]
+transform = Transform3D(0.9659, 0.2588, 0, -0.2588, 0.9659, 0, 0, 0, 1, 0.05, -0.1, 0)
+collision_layer = 4
+collision_mask = 2
+sync_to_physics = false
+
+[node name="UpperMesh" type="MeshInstance3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong3/ProngBody"]
+mesh = SubResource("Mesh_ProngUpper")
+
+[node name="UpperCol" type="CollisionShape3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong3/ProngBody"]
+shape = SubResource("Shape_ProngUpper")
+
+[node name="TipMesh" type="MeshInstance3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong3/ProngBody"]
+transform = Transform3D(0.866, -0.5, 0, 0.5, 0.866, 0, 0, 0, 1, -0.05, -0.12, 0)
+mesh = SubResource("Mesh_ProngTip")
+
+[node name="TipCol" type="CollisionShape3D" parent="GantryX/CarriageZ/ClawHub/Prongs/Prong3/ProngBody"]
+transform = Transform3D(0.866, -0.5, 0, 0.5, 0.866, 0, 0, 0, 1, -0.05, -0.12, 0)
+shape = SubResource("Shape_ProngTip")

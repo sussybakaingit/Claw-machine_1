@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://b8j2u5pri0e01"]
+
+[ext_resource type="Script" path="res://scripts/prize.gd" id="1_prize"]
+
+[node name="Prize" type="RigidBody3D"]
+collision_layer = 2
+collision_mask = 7
+continuous_cd = true
+script = ExtResource("1_prize")

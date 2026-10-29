@@ -1,0 +1,180 @@
+[gd_scene format=3 uid="uid://r8x3res01"]
+
+[ext_resource type="Script" path="res://scripts/results.gd" id="1_results"]
+
+[sub_resource type="StyleBoxFlat" id="Style_Window"]
+bg_color = Color(0.06, 0.08, 0.15, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.8, 0.2, 0.8)
+shadow_color = Color(0, 0, 0, 0.75)
+shadow_size = 28
+
+[sub_resource type="StyleBoxFlat" id="Style_BtnPrimary"]
+bg_color = Color(0.1, 0.55, 0.9, 0.95)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.85, 1, 0.9)
+
+[sub_resource type="StyleBoxFlat" id="Style_BtnSecondary"]
+bg_color = Color(0.12, 0.16, 0.26, 0.9)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.5, 0.8, 0.6)
+
+[node name="ResultsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_results")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.75)
+
+[node name="Panel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(460, 480)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -240.0
+offset_right = 230.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(230, 240)
+theme_override_styles/panel = SubResource("Style_Window")
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 32
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Header" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(1, 0.2, 0.6, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "★ ROUND OVER ★"
+horizontal_alignment = 1
+
+[node name="ScoreBox" type="VBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="FinalScoreTitle" type="Label" parent="Panel/Margin/VBox/ScoreBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.95, 1)
+theme_override_font_sizes/font_size = 16
+text = "FINAL SCORE"
+horizontal_alignment = 1
+
+[node name="FinalScoreLabel" type="Label" parent="Panel/Margin/VBox/ScoreBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.2, 0.8, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 64
+text = "120"
+horizontal_alignment = 1
+
+[node name="NewRecordBadge" type="Label" parent="Panel/Margin/VBox/ScoreBox"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "🏆 NEW HIGH SCORE! 🏆"
+horizontal_alignment = 1
+
+[node name="StatsBox" type="VBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PrizesHBox" type="HBoxContainer" parent="Panel/Margin/VBox/StatsBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/StatsBox/PrizesHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.85, 0.95, 1)
+text = "Prizes Collected:"
+
+[node name="PrizesVal" type="Label" parent="Panel/Margin/VBox/StatsBox/PrizesHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "4"
+
+[node name="BestHBox" type="HBoxContainer" parent="Panel/Margin/VBox/StatsBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/StatsBox/BestHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.85, 0.95, 1)
+text = "Personal Best:"
+
+[node name="BestVal" type="Label" parent="Panel/Margin/VBox/StatsBox/BestHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "250"
+
+[node name="ButtonsVBox" type="VBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_constants/separation = 12
+
+[node name="BtnPlayAgain" type="Button" parent="Panel/Margin/VBox/ButtonsVBox"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("Style_BtnPrimary")
+text = "↺ Play Again"
+
+[node name="BtnMainMenu" type="Button" parent="Panel/Margin/VBox/ButtonsVBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("Style_BtnSecondary")
+text = "⌂ Main Menu"
+
+[connection signal="pressed" from="Panel/Margin/VBox/ButtonsVBox/BtnPlayAgain" to="." method="_on_play_again_pressed"]
+[connection signal="pressed" from="Panel/Margin/VBox/ButtonsVBox/BtnMainMenu" to="." method="_on_main_menu_pressed"]

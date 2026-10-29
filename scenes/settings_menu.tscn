@@ -1,0 +1,419 @@
+[gd_scene format=3 uid="uid://s8x3set01"]
+
+[ext_resource type="Script" path="res://scripts/settings_menu.gd" id="1_settings"]
+
+[sub_resource type="StyleBoxFlat" id="Style_Window"]
+bg_color = Color(0.07, 0.09, 0.15, 0.96)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.8, 1, 0.7)
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 20
+
+[sub_resource type="StyleBoxFlat" id="Style_Tab"]
+bg_color = Color(0.12, 0.15, 0.22, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.3, 0.7, 0.9, 0.4)
+
+[sub_resource type="StyleBoxFlat" id="Style_Button"]
+bg_color = Color(0.15, 0.2, 0.32, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.8, 1, 0.6)
+
+[node name="SettingsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_settings")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="Panel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(760, 560)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -380.0
+offset_top = -280.0
+offset_right = 380.0
+offset_bottom = 280.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Style_Window")
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="HeaderHBox" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/Margin/VBox/HeaderHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.2, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 26
+text = "⚙ SETTINGS"
+
+[node name="TabContainer" type="TabContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/tab_selected = SubResource("Style_Tab")
+current_tab = 0
+
+[node name="Controls" type="TabBar" parent="Panel/Margin/VBox/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin/VBox/TabContainer/Controls"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="PresetBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Controls/VBox"]
+layout_mode = 2
+
+[node name="PresetLabel" type="Label" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/PresetBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 15
+text = "Preset: Normal"
+
+[node name="BtnBeginner" type="Button" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/PresetBox"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("Style_Button")
+text = " Beginner "
+
+[node name="BtnNormal" type="Button" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/PresetBox"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("Style_Button")
+text = " Normal "
+
+[node name="BtnPrecision" type="Button" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/PresetBox"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("Style_Button")
+text = " Precision "
+
+[node name="BtnReset" type="Button" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/PresetBox"]
+layout_mode = 2
+text = " Reset "
+
+[node name="SensBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Controls/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/SensBox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Movement Sensitivity:"
+
+[node name="Slider" type="HSlider" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/SensBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.25
+max_value = 3.0
+step = 0.05
+value = 1.0
+
+[node name="Val" type="Label" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/SensBox"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "1.00x"
+
+[node name="SpeedBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Controls/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/SpeedBox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Claw Speed:"
+
+[node name="Slider" type="HSlider" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/SpeedBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.5
+max_value = 2.5
+step = 0.05
+value = 1.0
+
+[node name="Val" type="Label" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/SpeedBox"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "1.00x"
+
+[node name="ThreshBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Controls/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/ThreshBox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Gesture Threshold:"
+
+[node name="Slider" type="HSlider" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/ThreshBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.2
+max_value = 0.8
+step = 0.02
+value = 0.45
+
+[node name="Val" type="Label" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/ThreshBox"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "0.45"
+
+[node name="SmoothBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Controls/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/SmoothBox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Hand Smoothing:"
+
+[node name="Slider" type="HSlider" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/SmoothBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.0
+max_value = 0.95
+step = 0.05
+value = 0.5
+
+[node name="Val" type="Label" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/SmoothBox"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "0.50"
+
+[node name="ModeBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Controls/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/ModeBox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Control Mode:"
+
+[node name="OptionButton" type="OptionButton" parent="Panel/Margin/VBox/TabContainer/Controls/VBox/ModeBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Graphics" type="TabBar" parent="Panel/Margin/VBox/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin/VBox/TabContainer/Graphics"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="QualityBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/QualityBox"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Graphics Preset:"
+
+[node name="OptionButton" type="OptionButton" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/QualityBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScaleBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/ScaleBox"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Render Scale:"
+
+[node name="Slider" type="HSlider" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/ScaleBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.5
+max_value = 1.5
+step = 0.05
+value = 1.0
+
+[node name="Val" type="Label" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/ScaleBox"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "100%"
+
+[node name="WindowBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/WindowBox"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Window Mode:"
+
+[node name="OptionButton" type="OptionButton" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/WindowBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VsyncBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/VsyncBox"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "VSync:"
+
+[node name="CheckBox" type="CheckBox" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/VsyncBox"]
+layout_mode = 2
+
+[node name="FPSCapBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/FPSCapBox"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Framerate Cap:"
+
+[node name="OptionButton" type="OptionButton" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/FPSCapBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MSAABox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/MSAABox"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "MSAA 3D:"
+
+[node name="OptionButton" type="OptionButton" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/MSAABox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SSAOBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/SSAOBox"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "SSAO (Ambient Occlusion):"
+
+[node name="CheckBox" type="CheckBox" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/SSAOBox"]
+layout_mode = 2
+
+[node name="GlowBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/GlowBox"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Neon Glow / Bloom:"
+
+[node name="CheckBox" type="CheckBox" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/GlowBox"]
+layout_mode = 2
+
+[node name="ShowFPSBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/ShowFPSBox"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Show FPS Counter:"
+
+[node name="CheckBox" type="CheckBox" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/ShowFPSBox"]
+layout_mode = 2
+
+[node name="CamPreviewBox" type="HBoxContainer" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/CamPreviewBox"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Webcam Landmark Preview:"
+
+[node name="CheckBox" type="CheckBox" parent="Panel/Margin/VBox/TabContainer/Graphics/VBox/CamPreviewBox"]
+layout_mode = 2
+
+[node name="FooterHBox" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+alignment = 2
+
+[node name="CloseButton" type="Button" parent="Panel/Margin/VBox/FooterHBox"]
+custom_minimum_size = Vector2(140, 38)
+layout_mode = 2
+theme_override_styles/normal = SubResource("Style_Button")
+text = "Save & Close"
+
+[connection signal="pressed" from="Panel/Margin/VBox/TabContainer/Controls/VBox/PresetBox/BtnBeginner" to="." method="_on_preset_beginner_pressed"]
+[connection signal="pressed" from="Panel/Margin/VBox/TabContainer/Controls/VBox/PresetBox/BtnNormal" to="." method="_on_preset_normal_pressed"]
+[connection signal="pressed" from="Panel/Margin/VBox/TabContainer/Controls/VBox/PresetBox/BtnPrecision" to="." method="_on_preset_precision_pressed"]
+[connection signal="pressed" from="Panel/Margin/VBox/TabContainer/Controls/VBox/PresetBox/BtnReset" to="." method="_on_reset_controls_pressed"]
+[connection signal="value_changed" from="Panel/Margin/VBox/TabContainer/Controls/VBox/SensBox/Slider" to="." method="_on_sens_changed"]
+[connection signal="value_changed" from="Panel/Margin/VBox/TabContainer/Controls/VBox/SpeedBox/Slider" to="." method="_on_speed_changed"]
+[connection signal="value_changed" from="Panel/Margin/VBox/TabContainer/Controls/VBox/ThreshBox/Slider" to="." method="_on_thresh_changed"]
+[connection signal="value_changed" from="Panel/Margin/VBox/TabContainer/Controls/VBox/SmoothBox/Slider" to="." method="_on_smooth_changed"]
+[connection signal="item_selected" from="Panel/Margin/VBox/TabContainer/Controls/VBox/ModeBox/OptionButton" to="." method="_on_mode_selected"]
+[connection signal="item_selected" from="Panel/Margin/VBox/TabContainer/Graphics/VBox/QualityBox/OptionButton" to="." method="_on_quality_selected"]
+[connection signal="value_changed" from="Panel/Margin/VBox/TabContainer/Graphics/VBox/ScaleBox/Slider" to="." method="_on_scale_changed"]
+[connection signal="item_selected" from="Panel/Margin/VBox/TabContainer/Graphics/VBox/WindowBox/OptionButton" to="." method="_on_window_selected"]
+[connection signal="toggled" from="Panel/Margin/VBox/TabContainer/Graphics/VBox/VsyncBox/CheckBox" to="." method="_on_vsync_toggled"]
+[connection signal="item_selected" from="Panel/Margin/VBox/TabContainer/Graphics/VBox/FPSCapBox/OptionButton" to="." method="_on_fps_cap_selected"]
+[connection signal="item_selected" from="Panel/Margin/VBox/TabContainer/Graphics/VBox/MSAABox/OptionButton" to="." method="_on_msaa_selected"]
+[connection signal="toggled" from="Panel/Margin/VBox/TabContainer/Graphics/VBox/SSAOBox/CheckBox" to="." method="_on_ssao_toggled"]
+[connection signal="toggled" from="Panel/Margin/VBox/TabContainer/Graphics/VBox/GlowBox/CheckBox" to="." method="_on_glow_toggled"]
+[connection signal="toggled" from="Panel/Margin/VBox/TabContainer/Graphics/VBox/ShowFPSBox/CheckBox" to="." method="_on_show_fps_toggled"]
+[connection signal="toggled" from="Panel/Margin/VBox/TabContainer/Graphics/VBox/CamPreviewBox/CheckBox" to="." method="_on_cam_preview_toggled"]
+[connection signal="pressed" from="Panel/Margin/VBox/FooterHBox/CloseButton" to="." method="_on_back_pressed"]

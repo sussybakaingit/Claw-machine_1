@@ -1,0 +1,273 @@
+[gd_scene format=3 uid="uid://d8x4hud01"]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
+[ext_resource type="Script" path="res://scripts/landmark_canvas.gd" id="2_canvas"]
+
+[sub_resource type="StyleBoxFlat" id="Style_PanelDark"]
+bg_color = Color(0.06, 0.08, 0.14, 0.85)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.7, 0.9, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="Style_Badge"]
+bg_color = Color(0.08, 0.1, 0.16, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.9, 0.6, 0.6)
+
+[sub_resource type="StyleBoxFlat" id="Style_Button"]
+bg_color = Color(0.12, 0.16, 0.24, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.7, 1.0, 0.6)
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_hud")
+
+[node name="TopBar" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 16.0
+offset_right = -40.0
+offset_bottom = 76.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("Style_PanelDark")
+
+[node name="Margin" type="MarginContainer" parent="TopBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 8
+
+[node name="HBox" type="HBoxContainer" parent="TopBar/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="TimerContainer" type="HBoxContainer" parent="TopBar/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimeTitle" type="Label" parent="TopBar/Margin/HBox/TimerContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.7, 0.85, 1)
+theme_override_font_sizes/font_size = 18
+text = "TIME: "
+
+[node name="TimerLabel" type="Label" parent="TopBar/Margin/HBox/TimerContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "01:00"
+
+[node name="ScoreContainer" type="HBoxContainer" parent="TopBar/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="TopBar/Margin/HBox/ScoreContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 28
+text = "SCORE: 0"
+
+[node name="HighScoreContainer" type="HBoxContainer" parent="TopBar/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="HighScoreLabel" type="Label" parent="TopBar/Margin/HBox/HighScoreContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "BEST: 0"
+
+[node name="PauseButton" type="Button" parent="TopBar/Margin/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("Style_Button")
+text = " ⏸ Pause "
+
+[node name="TrackingBadge" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = -68.0
+offset_right = 320.0
+offset_bottom = -24.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("Style_Badge")
+
+[node name="Margin" type="MarginContainer" parent="TrackingBadge"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 6
+
+[node name="HBox" type="HBoxContainer" parent="TrackingBadge/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StatusDot" type="ColorRect" parent="TrackingBadge/Margin/HBox"]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(0.2, 1, 0.4, 1)
+
+[node name="StatusLabel" type="Label" parent="TrackingBadge/Margin/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "TRACKING"
+
+[node name="Sep" type="VSeparator" parent="TrackingBadge/Margin/HBox"]
+layout_mode = 2
+
+[node name="GestureLabel" type="Label" parent="TrackingBadge/Margin/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.8, 0.3, 1)
+theme_override_font_sizes/font_size = 13
+text = "Open"
+
+[node name="CameraPreviewPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -210.0
+offset_top = -170.0
+offset_right = -30.0
+offset_bottom = -25.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("Style_PanelDark")
+
+[node name="VBox" type="VBoxContainer" parent="CameraPreviewPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CameraPreviewPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "  CAM PREVIEW"
+
+[node name="LandmarkCanvas" type="Control" parent="CameraPreviewPanel/VBox"]
+custom_minimum_size = Vector2(170, 115)
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_canvas")
+
+[node name="FPSLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -110.0
+offset_top = 84.0
+offset_right = -40.0
+offset_bottom = 105.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.4, 1, 0.5, 0.9)
+theme_override_font_sizes/font_size = 13
+text = "FPS: 60"
+
+[node name="CountdownOverlay" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CountdownLabel" type="Label" parent="CountdownOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -80.0
+offset_right = 150.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(150, 80)
+theme_override_colors/font_color = Color(1, 0.85, 0.1, 1)
+theme_override_colors/font_outline_color = Color(1, 0.1, 0.5, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 88
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ErrorBanner" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -270.0
+offset_top = -80.0
+offset_right = 270.0
+offset_bottom = -25.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("Style_PanelDark")
+
+[node name="Margin" type="MarginContainer" parent="ErrorBanner"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="HBox" type="HBoxContainer" parent="ErrorBanner/Margin"]
+layout_mode = 2
+
+[node name="Msg" type="Label" parent="ErrorBanner/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.8, 0.4, 1)
+theme_override_font_sizes/font_size = 12
+text = "Camera sidecar not active. Mouse control enabled (Move = Mouse, Grab = Click)."
+
+[node name="CloseBtn" type="Button" parent="ErrorBanner/Margin/HBox"]
+layout_mode = 2
+text = " ✕ "
+
+[connection signal="pressed" from="TopBar/Margin/HBox/PauseButton" to="." method="_on_pause_button_pressed"]
+[connection signal="pressed" from="ErrorBanner/Margin/HBox/CloseBtn" to="." method="_on_close_error_banner_pressed"]

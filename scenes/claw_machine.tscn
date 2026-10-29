@@ -1,0 +1,224 @@
+[gd_scene format=3 uid="uid://m8x4w1cab01"]
+
+[ext_resource type="Script" path="res://scripts/claw_machine.gd" id="1_machine"]
+[ext_resource type="PackedScene" path="res://scenes/claw.tscn" id="2_claw"]
+[ext_resource type="Script" path="res://scripts/prize_spawner.gd" id="3_spawner"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_Podium"]
+metallic = 0.4
+roughness = 0.3
+albedo_color = Color(0.08, 0.09, 0.14, 1)
+clearcoat_enabled = true
+clearcoat = 0.6
+
+[sub_resource type="BoxMesh" id="Mesh_Base"]
+material = SubResource("Mat_Podium")
+size = Vector3(2.0, 0.8, 1.8)
+
+[sub_resource type="BoxShape3D" id="Shape_Floor"]
+size = Vector3(2.0, 0.2, 1.8)
+
+[sub_resource type="StandardMaterial3D" id="Mat_FloorBed"]
+metallic = 0.6
+roughness = 0.4
+albedo_color = Color(0.12, 0.14, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_FloorBed"]
+material = SubResource("Mat_FloorBed")
+size = Vector3(1.7, 0.05, 1.5)
+
+[sub_resource type="StandardMaterial3D" id="Mat_NeonCyan"]
+emission_enabled = true
+emission = Color(0.0, 0.85, 1.0, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="CylinderMesh" id="Mesh_Pillar"]
+material = SubResource("Mat_NeonCyan")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 2.2
+
+[sub_resource type="StandardMaterial3D" id="Mat_NeonPink"]
+emission_enabled = true
+emission = Color(1.0, 0.1, 0.6, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="BoxMesh" id="Mesh_Marquee"]
+material = SubResource("Mat_Podium")
+size = Vector3(2.0, 0.4, 1.8)
+
+[sub_resource type="StandardMaterial3D" id="Mat_Glass"]
+transparency = 1
+albedo_color = Color(0.85, 0.95, 1.0, 0.12)
+roughness = 0.05
+refraction_enabled = true
+refraction_scale = 0.015
+
+[sub_resource type="BoxMesh" id="Mesh_GlassFront"]
+material = SubResource("Mat_Glass")
+size = Vector3(1.7, 2.0, 0.02)
+
+[sub_resource type="BoxMesh" id="Mesh_GlassSide"]
+material = SubResource("Mat_Glass")
+size = Vector3(0.02, 2.0, 1.5)
+
+[sub_resource type="BoxShape3D" id="Shape_WallZ"]
+size = Vector3(1.8, 2.2, 0.1)
+
+[sub_resource type="BoxShape3D" id="Shape_WallX"]
+size = Vector3(0.1, 2.2, 1.6)
+
+[sub_resource type="StandardMaterial3D" id="Mat_Chute"]
+metallic = 0.8
+roughness = 0.25
+albedo_color = Color(0.9, 0.7, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_ChuteRim"]
+material = SubResource("Mat_Chute")
+size = Vector3(0.44, 0.08, 0.44)
+
+[sub_resource type="BoxShape3D" id="Shape_ChuteArea"]
+size = Vector3(0.42, 0.4, 0.42)
+
+[sub_resource type="ParticleProcessMaterial" id="Part_ConfettiMat"]
+direction = Vector3(0, 1, 0)
+spread = 45.0
+initial_velocity_min = 3.5
+initial_velocity_max = 6.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+gravity = Vector3(0, -6.5, 0)
+scale_min = 0.05
+scale_max = 0.12
+
+[sub_resource type="StandardMaterial3D" id="Mat_Confetti"]
+albedo_color = Color(1, 0.8, 0.2, 1)
+emission_enabled = true
+emission = Color(1, 0.8, 0.2, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="QuadMesh" id="Mesh_ConfettiQuad"]
+material = SubResource("Mat_Confetti")
+size = Vector2(0.08, 0.08)
+
+[node name="ClawMachine" type="Node3D"]
+script = ExtResource("1_machine")
+
+[node name="BasePodium" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
+mesh = SubResource("Mesh_Base")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="FloorCol" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("Shape_Floor")
+
+[node name="WallFront" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0.8)
+shape = SubResource("Shape_WallZ")
+
+[node name="WallBack" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -0.8)
+shape = SubResource("Shape_WallZ")
+
+[node name="WallLeft" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.1, 0)
+shape = SubResource("Shape_WallX")
+
+[node name="WallRight" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.1, 0)
+shape = SubResource("Shape_WallX")
+
+[node name="FloorBed" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+mesh = SubResource("Mesh_FloorBed")
+
+[node name="PillarFL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, 1.1, 0.78)
+mesh = SubResource("Mesh_Pillar")
+
+[node name="PillarFR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, 1.1, 0.78)
+mesh = SubResource("Mesh_Pillar")
+
+[node name="PillarBL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, 1.1, -0.78)
+mesh = SubResource("Mesh_Pillar")
+
+[node name="PillarBR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, 1.1, -0.78)
+mesh = SubResource("Mesh_Pillar")
+
+[node name="MarqueeCanopy" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
+mesh = SubResource("Mesh_Marquee")
+
+[node name="MarqueeText" type="Label3D" parent="MarqueeCanopy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.91)
+text = "★ C L A W ★"
+font_size = 72
+modulate = Color(1, 0.85, 0.1, 1)
+outline_modulate = Color(1, 0.1, 0.6, 1)
+outline_size = 18
+
+[node name="GlassFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0.78)
+mesh = SubResource("Mesh_GlassFront")
+
+[node name="GlassBack" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -0.78)
+mesh = SubResource("Mesh_GlassFront")
+
+[node name="GlassLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, 1.1, 0)
+mesh = SubResource("Mesh_GlassSide")
+
+[node name="GlassRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, 1.1, 0)
+mesh = SubResource("Mesh_GlassSide")
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+size = Vector3(2.5, 2.5, 2.5)
+interior = true
+
+[node name="SpotLightInterior" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.15, 0)
+light_color = Color(1, 0.95, 0.88, 1)
+light_energy = 2.8
+spot_range = 3.5
+spot_angle = 55.0
+
+[node name="ChuteRim" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.05, 0.55)
+mesh = SubResource("Mesh_ChuteRim")
+
+[node name="ChuteLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.25, 0.55)
+light_color = Color(0.2, 0.9, 1, 1)
+light_energy = 1.0
+omni_range = 1.0
+
+[node name="ChuteArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.1, 0.55)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ChuteArea"]
+shape = SubResource("Shape_ChuteArea")
+
+[node name="ConfettiParticles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.15, 0.55)
+emitting = false
+amount = 45
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.9
+process_material = SubResource("Part_ConfettiMat")
+draw_pass_1 = SubResource("Mesh_ConfettiQuad")
+
+[node name="Claw" parent="." instance=ExtResource("2_claw")]
+
+[node name="PrizeSpawner" type="Node3D" parent="."]
+script = ExtResource("3_spawner")

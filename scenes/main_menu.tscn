@@ -1,0 +1,251 @@
+[gd_scene format=3 uid="uid://m8x3mnm01"]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://scenes/claw_machine.tscn" id="2_machine"]
+[ext_resource type="PackedScene" path="res://scenes/settings_menu.tscn" id="3_settings"]
+[ext_resource type="Script" path="res://scripts/camera_sway.gd" id="4_sway"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
+sky_top_color = Color(0.04, 0.05, 0.08, 1)
+sky_horizon_color = Color(0.1, 0.12, 0.18, 1)
+ground_bottom_color = Color(0.02, 0.03, 0.05, 1)
+ground_horizon_color = Color(0.08, 0.1, 0.15, 1)
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_1")
+
+[sub_resource type="Environment" id="Environment_Menu"]
+background_mode = 2
+sky = SubResource("Sky_1")
+ambient_light_source = 2
+ambient_light_color = Color(0.12, 0.15, 0.22, 1)
+ambient_light_energy = 0.8
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+glow_intensity = 0.8
+glow_bloom = 0.25
+glow_blend_mode = 1
+
+[sub_resource type="StyleBoxFlat" id="Style_MenuCard"]
+bg_color = Color(0.06, 0.08, 0.15, 0.9)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.8, 1, 0.8)
+shadow_color = Color(0, 0, 0, 0.7)
+shadow_size = 24
+
+[sub_resource type="StyleBoxFlat" id="Style_BtnPlay"]
+bg_color = Color(0.0, 0.7, 0.45, 0.95)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 1, 0.7, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_BtnDuration"]
+bg_color = Color(0.12, 0.16, 0.26, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.7, 1, 0.6)
+
+[sub_resource type="StyleBoxFlat" id="Style_BtnSecondary"]
+bg_color = Color(0.12, 0.16, 0.26, 0.9)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.6, 0.9, 0.5)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="World3D" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World3D"]
+environment = SubResource("Environment_Menu")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="World3D"]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 2.5, 4, 3)
+light_color = Color(0.9, 0.95, 1, 1)
+light_energy = 0.9
+shadow_enabled = true
+
+[node name="RoomLightLeft" type="OmniLight3D" parent="World3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 2.0, 1.0)
+light_color = Color(0.8, 0.1, 0.6, 1)
+light_energy = 1.4
+omni_range = 4.0
+
+[node name="RoomLightRight" type="OmniLight3D" parent="World3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 2.0, 1.0)
+light_color = Color(0.1, 0.7, 1.0, 1)
+light_energy = 1.4
+omni_range = 4.0
+
+[node name="Camera3D" type="Camera3D" parent="World3D"]
+transform = Transform3D(0.984808, 0.0449435, -0.167731, 0, 0.965926, 0.258819, 0.173648, -0.254887, 0.951251, -0.5, 2.0, 2.6)
+current = true
+fov = 50.0
+script = ExtResource("4_sway")
+sway_amount = 0.035
+sway_speed = 0.5
+
+[node name="ClawMachine" parent="World3D" instance=ExtResource("2_machine")]
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 40
+
+[node name="VBox" type="VBoxContainer" parent="UI/Margin"]
+layout_mode = 2
+alignment = 1
+
+[node name="HeaderBox" type="VBoxContainer" parent="UI/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="UI/Margin/VBox/HeaderBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.1, 1)
+theme_override_colors/font_outline_color = Color(1, 0.1, 0.6, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 56
+text = "★ 3D CLAW MACHINE ★"
+
+[node name="Subtitle" type="Label" parent="UI/Margin/VBox/HeaderBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Real-Time Webcam Hand Tracking Arcade Experience"
+
+[node name="Spacer" type="Control" parent="UI/Margin/VBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="MenuCard" type="PanelContainer" parent="UI/Margin/VBox"]
+custom_minimum_size = Vector2(380, 340)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("Style_MenuCard")
+
+[node name="Margin" type="MarginContainer" parent="UI/Margin/VBox/MenuCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="UI/Margin/VBox/MenuCard/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="HighScoreLabel" type="Label" parent="UI/Margin/VBox/MenuCard/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 15
+text = "🏆 HIGH SCORE: 0"
+
+[node name="DurationTitle" type="Label" parent="UI/Margin/VBox/MenuCard/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "SELECT ROUND LENGTH:"
+
+[node name="DurationBox" type="HBoxContainer" parent="UI/Margin/VBox/MenuCard/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Btn30s" type="Button" parent="UI/Margin/VBox/MenuCard/Margin/VBox/DurationBox"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("Style_BtnDuration")
+text = "⏱ 30s Round"
+
+[node name="Btn60s" type="Button" parent="UI/Margin/VBox/MenuCard/Margin/VBox/DurationBox"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("Style_BtnDuration")
+text = "⏱ 60s Round"
+
+[node name="BtnPlay" type="Button" parent="UI/Margin/VBox/MenuCard/Margin/VBox"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("Style_BtnPlay")
+text = "▶ PLAY"
+
+[node name="BtnCalibrate" type="Button" parent="UI/Margin/VBox/MenuCard/Margin/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("Style_BtnSecondary")
+text = "✋ Calibrate Hand"
+
+[node name="BtnSettings" type="Button" parent="UI/Margin/VBox/MenuCard/Margin/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("Style_BtnSecondary")
+text = "⚙ Settings"
+
+[node name="StatusBadge" type="Label" parent="UI/Margin/VBox/MenuCard/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 12
+text = "🖱 Hand Tracker Waiting (Mouse Active)"
+autowrap_mode = 2
+
+[node name="SettingsMenu" parent="." instance=ExtResource("3_settings")]
+visible = false
+layout_mode = 1
+
+[connection signal="pressed" from="UI/Margin/VBox/MenuCard/Margin/VBox/DurationBox/Btn30s" to="." method="_on_duration_30_pressed"]
+[connection signal="pressed" from="UI/Margin/VBox/MenuCard/Margin/VBox/DurationBox/Btn60s" to="." method="_on_duration_60_pressed"]
+[connection signal="pressed" from="UI/Margin/VBox/MenuCard/Margin/VBox/BtnPlay" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="UI/Margin/VBox/MenuCard/Margin/VBox/BtnCalibrate" to="." method="_on_calibrate_pressed"]
+[connection signal="pressed" from="UI/Margin/VBox/MenuCard/Margin/VBox/BtnSettings" to="." method="_on_settings_pressed"]

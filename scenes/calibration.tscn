@@ -1,0 +1,127 @@
+[gd_scene format=3 uid="uid://c8x3cal01"]
+
+[ext_resource type="Script" path="res://scripts/calibration.gd" id="1_calib"]
+[ext_resource type="Script" path="res://scripts/landmark_canvas.gd" id="2_canvas"]
+
+[sub_resource type="StyleBoxFlat" id="Style_Window"]
+bg_color = Color(0.06, 0.08, 0.15, 0.95)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.8, 1, 0.8)
+shadow_color = Color(0, 0, 0, 0.7)
+shadow_size = 24
+
+[sub_resource type="StyleBoxFlat" id="Style_Btn"]
+bg_color = Color(0.12, 0.16, 0.28, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.8, 1, 0.6)
+
+[node name="Calibration" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_calib")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.75)
+
+[node name="Panel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(580, 520)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -290.0
+offset_top = -260.0
+offset_right = 290.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Style_Window")
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 28
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "✋ HAND TRACKING CALIBRATION"
+horizontal_alignment = 1
+
+[node name="StepTitle" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "Step 1 of 3: Hand Detection"
+horizontal_alignment = 1
+
+[node name="CamFrame" type="PanelContainer" parent="Panel/Margin/VBox"]
+custom_minimum_size = Vector2(320, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="LandmarkCanvas" type="Control" parent="Panel/Margin/VBox/CamFrame"]
+custom_minimum_size = Vector2(320, 200)
+layout_mode = 2
+script = ExtResource("2_canvas")
+
+[node name="InstructionLabel" type="Label" parent="Panel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Raise your hand in front of the camera.
+Keep your fingers open and palm visible."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="Panel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+value = 45.0
+show_percentage = false
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="SkipButton" type="Button" parent="Panel/Margin/VBox/Buttons"]
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+theme_override_styles/normal = SubResource("Style_Btn")
+text = "Skip Calibration"
+
+[connection signal="pressed" from="Panel/Margin/VBox/Buttons/SkipButton" to="." method="_on_skip_pressed"]
